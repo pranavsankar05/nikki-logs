@@ -1,0 +1,10 @@
+{
+  "description": "This minimalist blog journal showcases personal posts and a portfolio, featuring a modern design with a clean black and white aesthetic and vibrant accents.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
