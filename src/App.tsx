@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import branchImg from './imports/ChatGPT_Image_Aug_10__2026__08_29_12_PM.png'
+import avatarImg from './imports/9.jpeg'
 
 type Post = {
   id: number
@@ -90,7 +92,7 @@ export default function App() {
         </span>
         <div className="flex justify-end">
           <a
-            href="https://example.com"
+            href="https://pranavsankar.me"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Portfolio (opens in new tab)"
@@ -112,7 +114,7 @@ export default function App() {
       >
         {/* cherry blossom branch — trunk from right, spreads left */}
         <img
-          src="/src/imports/ChatGPT_Image_Aug_10__2026__08_29_12_PM.png"
+          src={branchImg}
           aria-hidden="true"
           alt=""
           className="absolute pointer-events-none select-none"
@@ -140,7 +142,7 @@ export default function App() {
             style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}
           >
             <a
-              href="https://example.com"
+              href="https://pranavsankar.me"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#0d0d0d] font-normal hover:font-medium underline-offset-2 hover:underline transition-all duration-200"
@@ -164,7 +166,7 @@ export default function App() {
 
         {/* portfolio button — bottom right */}
         <a
-          href="https://example.com"
+          href="https://pranavsankar.me"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Visit portfolio (opens in new tab)"
@@ -172,7 +174,7 @@ export default function App() {
           style={{ background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.08)' }}
         >
           <img
-            src="/src/imports/9.jpeg"
+            src={avatarImg}
             alt="Pranav Sankar"
             className="w-6 h-6 rounded-full object-cover object-top grayscale flex-shrink-0"
           />
