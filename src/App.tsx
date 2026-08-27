@@ -110,6 +110,36 @@ export default function App() {
         className="relative min-h-screen flex flex-col justify-center px-8 md:px-14"
         style={{}}
       >
+        {/* flying sakura petals */}
+        {[
+          { size: 16, top: '10%', delay: '0s',   dur: '18s', dy: '180px', rot: '300deg' },
+          { size: 14, top: '20%', delay: '5s',   dur: '22s', dy: '150px', rot: '270deg' },
+          { size: 18, top: '6%',  delay: '11s',  dur: '20s', dy: '220px', rot: '340deg' },
+          { size: 15, top: '16%', delay: '16s',  dur: '19s', dy: '130px', rot: '290deg' },
+        ].map((p, i) => (
+          <svg
+            key={i}
+            aria-hidden="true"
+            viewBox="0 0 20 20"
+            className="sakura-petal absolute select-none"
+            style={{
+              width: p.size,
+              height: p.size,
+              top: p.top,
+              right: '4%',
+              opacity: 0,
+              ['--petal-dy' as string]: p.dy,
+              ['--petal-rot' as string]: p.rot,
+              animation: `petalDrift ${p.dur} ${p.delay} ease-in infinite, petalWobble ${p.dur} ${p.delay} ease-in-out infinite`,
+            }}
+          >
+            {/* petal: two rounded lobes meeting at a point */}
+            <path d="M10 18 C4 14, 2 6, 10 2 C18 6, 16 14, 10 18Z" fill="#a02030" opacity="0.9" />
+            <path d="M10 18 C6 12, 5 5, 10 2 C15 5, 14 12, 10 18Z" fill="#c85060" opacity="0.45" />
+            <line x1="10" y1="3" x2="10" y2="17" stroke="#7a1525" strokeWidth="0.6" opacity="0.3" />
+          </svg>
+        ))}
+
         {/* cherry blossom branch — trunk from right, spreads left */}
         <img
           src="/src/imports/ChatGPT_Image_Aug_10__2026__08_29_12_PM.png"

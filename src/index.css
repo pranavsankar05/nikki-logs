@@ -38,6 +38,25 @@ body {
   pointer-events: none;
 }
 
+@keyframes petalDrift {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  8% { opacity: 0.85; }
+  90% { opacity: 0.4; }
+  100% {
+    transform: translateX(-105vw) translateY(var(--petal-dy, 120px)) rotate(var(--petal-rot, 320deg));
+    opacity: 0;
+  }
+}
+
+@keyframes petalWobble {
+  0%, 100% { margin-top: 0; }
+  25% { margin-top: -12px; }
+  75% { margin-top: 10px; }
+}
+
 @keyframes branchSway {
   0%, 100% { transform: rotate(0deg); }
   30%  { transform: rotate(1.2deg); }
