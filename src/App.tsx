@@ -72,7 +72,7 @@ export default function App() {
   const [hoverIdx, setHoverIdx] = useState<number | null>(null)
 
   return (
-    <div className="min-h-screen text-[#0d0d0d]" style={{ fontFamily: "'Inter', sans-serif", backgroundColor: '#fdfbf8' }}>
+    <div className="min-h-screen overflow-x-hidden text-[#0d0d0d]" style={{ fontFamily: "'Inter', sans-serif", backgroundColor: '#fdfbf8' }}>
 
       {/* ── NAV ── 3-column spread */}
       <nav className="fixed top-0 left-0 right-0 z-50 grid grid-cols-3 items-center px-8 md:px-14 py-3"
