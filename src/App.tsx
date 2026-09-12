@@ -9,6 +9,7 @@ type Post = {
   tag: string
   excerpt: string
   readTime: string
+  image: string
 }
 
 const posts: Post[] = [
@@ -20,6 +21,7 @@ const posts: Post[] = [
     excerpt:
       "Every artefact we make is a small wager against forgetting. I've been thinking about what it means to build software with the same care a craftsman brings to physical objects.",
     readTime: '6 min',
+    image: 'https://picsum.photos/seed/craft1/600/750',
   },
   {
     id: 2,
@@ -29,6 +31,7 @@ const posts: Post[] = [
     excerpt:
       "Constraints aren't limitations — they're the walls that give a room its shape. Starting from total freedom is the hardest condition to create well inside.",
     readTime: '4 min',
+    image: 'https://picsum.photos/seed/canvas2/600/750',
   },
   {
     id: 3,
@@ -38,6 +41,7 @@ const posts: Post[] = [
     excerpt:
       "What if we measured interface quality not in clicks-to-task, but in how little of someone's cognitive presence we consumed to get them there?",
     readTime: '8 min',
+    image: 'https://picsum.photos/seed/design3/600/750',
   },
   {
     id: 4,
@@ -47,6 +51,7 @@ const posts: Post[] = [
     excerpt:
       'An experiment: no feeds, no aggregators, no summaries. Thirty days of books and long essays only, and what it quietly rearranged in how I think.',
     readTime: '5 min',
+    image: 'https://picsum.photos/seed/reading4/600/750',
   },
   {
     id: 5,
@@ -56,6 +61,7 @@ const posts: Post[] = [
     excerpt:
       "Paper doesn't autocorrect you. It doesn't suggest what you probably meant or flatten your handwriting into a neutral font. That friction is the point.",
     readTime: '3 min',
+    image: 'https://picsum.photos/seed/sketch5/600/750',
   },
   {
     id: 6,
@@ -65,6 +71,7 @@ const posts: Post[] = [
     excerpt:
       "There's a particular confidence that only comes from shipping. Not from planning or from learning — from the act of completing something, however modest.",
     readTime: '5 min',
+    image: 'https://picsum.photos/seed/craft6/600/750',
   },
 ]
 
@@ -203,56 +210,76 @@ export default function App() {
           </h2>
         </div>
 
-        {/* posts */}
-        <ul>
+        {/* posts grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16">
           {posts.map((post, i) => (
-            <li
+            <article
               key={post.id}
-              className="border-t border-[#e8e8e8] first:border-t-0"
+              className="group cursor-pointer"
               onMouseEnter={() => setHoverIdx(i)}
               onMouseLeave={() => setHoverIdx(null)}
             >
-              <article className="group grid grid-cols-[140px_1fr] md:grid-cols-[180px_1fr] gap-6 md:gap-16 py-5">
-                {/* left: date */}
+              {/* cover image */}
+              <div className="relative w-full aspect-[4/5] overflow-hidden rounded-sm mb-4 bg-[#eeece6]">
+                <img
+                  src={post.image}
+                  alt=""
+                  className="w-full h-full object-cover transition-all duration-500"
+                  style={{
+                    filter: hoverIdx === i ? 'grayscale(0%)' : 'grayscale(100%)',
+                    transform: hoverIdx === i ? 'scale(1.03)' : 'scale(1)',
+                  }}
+                />
+                {/* tag badge */}
                 <span
-                  className="text-[13px] text-[#6b6b6b] pt-1"
-                  style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}
+                  className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] tracking-[0.14em] uppercase"
+                  style={{ fontFamily: "'Space Mono', monospace", background: 'rgba(253,251,248,0.92)', color: '#0d0d0d' }}
                 >
-                  {post.date}
+                  {post.tag}
                 </span>
+              </div>
 
-                {/* right: title + excerpt + read time */}
-                <div className="flex flex-col gap-2">
-                  <h3
-                    className="text-[0.95rem] md:text-[1rem] leading-snug flex items-baseline gap-3 transition-colors duration-200"
-                    style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 500, color: hoverIdx === i ? '#a83232' : '#0d0d0d' }}
-                  >
-                    {post.title}
-                    <span
-                      aria-hidden="true"
-                      className="text-[#a50000] text-base transition-all duration-200"
-                      style={{ opacity: hoverIdx === i ? 1 : 0, transform: hoverIdx === i ? 'translateX(0)' : 'translateX(-6px)', display: 'inline-block' }}
-                    >
-                      →
-                    </span>
-                  </h3>
-                  <p
-                    className="text-[12px] leading-relaxed max-w-xl transition-colors duration-200"
-                    style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300, color: hoverIdx === i ? '#8a3a3a' : '#5a5a5a' }}
-                  >
-                    {post.excerpt}
-                  </p>
-                  <span
-                    className="text-[12px] text-[#9b9b9b] mt-1"
-                    style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}
-                  >
-                    {post.readTime} read
-                  </span>
-                </div>
-              </article>
-            </li>
+              {/* meta line */}
+              <span
+                className="text-[12px] text-[#9b9b9b] block mb-1.5"
+                style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}
+              >
+                {post.date}
+              </span>
+
+              {/* title */}
+              <h3
+                className="text-[1.05rem] leading-snug mb-1.5 transition-colors duration-200"
+                style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 500, color: hoverIdx === i ? '#a50000' : '#0d0d0d' }}
+              >
+                {post.title}
+              </h3>
+
+              {/* excerpt */}
+              <p
+                className="text-[12.5px] leading-relaxed text-[#5a5a5a] mb-2"
+                style={{
+                  fontFamily: "'Outfit', sans-serif",
+                  fontWeight: 300,
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                }}
+              >
+                {post.excerpt}
+              </p>
+
+              {/* read time */}
+              <span
+                className="text-[11px] tracking-[0.1em] uppercase text-[#9b9b9b]"
+                style={{ fontFamily: "'Space Mono', monospace" }}
+              >
+                {post.readTime} read
+              </span>
+            </article>
           ))}
-        </ul>
+        </div>
       </section>
 
       {/* ── FOOTER ── */}
