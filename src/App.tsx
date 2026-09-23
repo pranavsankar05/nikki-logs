@@ -128,7 +128,7 @@ export default function App() {
           style={{
             top: '3%',
             right: '-6%',
-            width: 'clamp(520px, 65vw, 820px)',
+            width: 'clamp(600px, 68vw, 1150px)',
             height: 'auto',
             mixBlendMode: 'multiply',
             transformOrigin: '92% 30%',
@@ -138,14 +138,14 @@ export default function App() {
 
         <div className="max-w-3xl">
           <h1
-            className="text-[clamp(2.8rem,7.5vw,6rem)] leading-[1.1] text-[#0d0d0d] mb-3"
+            className="text-[clamp(3.5rem,9vw,9rem)] leading-[1.05] text-[#0d0d0d] mb-4"
             style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300, letterSpacing: '-0.03em' }}
           >
             we look for<br />
             <span style={{ fontWeight: 500 }}>what's changing.</span>
           </h1>
           <p
-            className="text-[18px] leading-relaxed text-[#5a5a5a] max-w-md"
+            className="text-[clamp(1rem,1.4vw,1.4rem)] leading-relaxed text-[#5a5a5a] max-w-lg"
             style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}
           >
             <a
@@ -164,9 +164,9 @@ export default function App() {
           href="#journal"
           aria-label="Scroll to journal"
           className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center justify-center rounded-full"
-          style={{ width: 36, height: 36, background: '#0d0d0d', animation: 'scrollBounce 3s ease-in-out infinite' }}
+          style={{ width: 46, height: 46, background: '#0d0d0d', animation: 'scrollBounce 3s ease-in-out infinite' }}
         >
-          <svg aria-hidden="true" width="12" height="20" viewBox="0 0 12 20" fill="none">
+          <svg aria-hidden="true" width="15" height="25" viewBox="0 0 12 20" fill="none">
             <path d="M6 1v14M1 11l5 6 5-6" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </a>
@@ -177,20 +177,20 @@ export default function App() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Visit portfolio (opens in new tab)"
-          className="absolute bottom-10 right-8 md:right-14 flex items-center gap-2.5 px-3 py-2 rounded-full group transition-all duration-200 hover:shadow-md"
+          className="absolute bottom-10 right-8 md:right-14 flex items-center gap-3 px-4 py-2.5 rounded-full group transition-all duration-200 hover:shadow-md"
           style={{ background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.08)' }}
         >
           <img
             src={avatarImg}
             alt="Pranav Sankar"
-            className="w-6 h-6 rounded-full object-cover object-top grayscale flex-shrink-0"
+            className="w-8 h-8 rounded-full object-cover object-top grayscale flex-shrink-0"
           />
           <span
-            className="text-[11px] tracking-[0.18em] uppercase text-white group-hover:text-[#83F701] transition-colors duration-200 flex items-center gap-1.5"
+            className="text-[13px] tracking-[0.18em] uppercase text-white group-hover:text-[#83F701] transition-colors duration-200 flex items-center gap-1.5"
             style={{ fontFamily: "'Space Mono', monospace" }}
           >
             Portfolio
-            <svg aria-hidden="true" width="9" height="9" viewBox="0 0 9 9" fill="none" className="opacity-50 group-hover:opacity-100 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+            <svg aria-hidden="true" width="10" height="10" viewBox="0 0 9 9" fill="none" className="opacity-50 group-hover:opacity-100 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
               <path d="M1 8L8 1M8 1H3.5M8 1V5.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </span>
