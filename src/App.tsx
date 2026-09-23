@@ -128,7 +128,7 @@ export default function App() {
           style={{
             top: '3%',
             right: '-6%',
-            width: 'clamp(420px, 55vw, 680px)',
+            width: 'clamp(520px, 65vw, 820px)',
             height: 'auto',
             mixBlendMode: 'multiply',
             transformOrigin: '92% 30%',
@@ -138,14 +138,14 @@ export default function App() {
 
         <div className="max-w-3xl">
           <h1
-            className="text-[clamp(2.2rem,6vw,4.8rem)] leading-[1.1] text-[#0d0d0d] mb-3"
+            className="text-[clamp(2.8rem,7.5vw,6rem)] leading-[1.1] text-[#0d0d0d] mb-3"
             style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300, letterSpacing: '-0.03em' }}
           >
             we look for<br />
             <span style={{ fontWeight: 500 }}>what's changing.</span>
           </h1>
           <p
-            className="text-[15px] leading-relaxed text-[#5a5a5a] max-w-sm"
+            className="text-[18px] leading-relaxed text-[#5a5a5a] max-w-md"
             style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}
           >
             <a
