@@ -220,7 +220,7 @@ export default function App() {
               onMouseLeave={() => setHoverIdx(null)}
             >
               {/* cover image */}
-              <div className="relative w-full aspect-[4/5] overflow-hidden rounded-sm mb-4 bg-[#eeece6]">
+              <div className="relative w-full aspect-[4/5] overflow-hidden rounded-3xl mb-4 bg-[#eeece6]">
                 <img
                   src={post.image}
                   alt=""
