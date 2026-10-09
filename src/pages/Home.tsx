@@ -104,8 +104,8 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16">
           {posts.map((post, i) => (
             <Link
-              to={`/post/${post.id}`}
-              key={post.id}
+              to={`/post/${post.slug}`}
+              key={post.slug}
               className="group cursor-pointer block"
               onMouseEnter={() => setHoverIdx(i)}
               onMouseLeave={() => setHoverIdx(null)}

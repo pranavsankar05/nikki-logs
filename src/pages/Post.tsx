@@ -64,7 +64,7 @@ function Byline({ withBio }: { withBio: boolean }) {
 
 export default function Post() {
   const { id } = useParams()
-  const index = posts.findIndex((p) => p.id === Number(id))
+  const index = posts.findIndex((p) => p.slug === id)
   const post = posts[index]
   const next = posts[(index + 1) % posts.length]
 
@@ -165,7 +165,7 @@ export default function Post() {
             >
               ← Journal
             </Link>
-            <Link to={`/post/${next.id}`} className="text-right group">
+            <Link to={`/post/${next.slug}`} className="text-right group">
               <div
                 className="text-[11px] tracking-[0.14em] uppercase mb-1"
                 style={{ fontFamily: "'Space Mono', monospace", color: '#9b9b9b' }}
