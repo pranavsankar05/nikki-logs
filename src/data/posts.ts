@@ -7,6 +7,7 @@ export type Post = {
   excerpt: string
   readTime: string
   image: string
+  imageCredit?: string
   content: string[]
   sources?: { title: string; url: string }[]
   score?: { overall: number; accuracy: number }
