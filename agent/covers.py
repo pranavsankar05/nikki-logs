@@ -1,6 +1,7 @@
 import io
 import json
 import random
+import time
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -37,10 +38,17 @@ CENTER_ZOOM = 1.0     # 1.0 = widest center crop; 0.7 = closer on the middle
 
 Image.MAX_IMAGE_PIXELS = 250_000_000
 
-def _get(url, timeout=20):
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        return r.read()
+
+def _get(url, timeout=20, retries=3):
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return r.read()
+        except Exception:
+            if attempt == retries - 1:
+                raise
+            time.sleep(2 * (attempt + 1))
 
 
 def _json(url, timeout=20):
@@ -129,7 +137,7 @@ def get_cover(slug, dry=False):
             try:
                 data = _make_cover(_get(obj["primaryImage"], timeout=60))
             except Exception as e:
-                print("image failed:", e)
+                print("image failed:", e, obj["primaryImage"])
                 continue
             if data is None:
                 print("skipped: image too small")
