@@ -6,35 +6,38 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageStat
 
 API = "https://collectionapi.metmuseum.org/public/collection/v1"
 HERE = Path(__file__).resolve().parent
 COVERS_DIR = HERE.parent / "public" / "covers"
 USED_FILE = HERE / "used_covers.json"
 
-# Only draw from departments likely to hold abstract / decorative work
-DEPT_WORDS = ["asian", "islamic", "european paintings", "modern", "africa"]
+# Departments likely to hold flat, decorative artworks
+DEPT_WORDS = ["asian", "islamic", "european paintings", "modern"]
 
-# The work must match at least one of these (checked against type, medium, classification)
-ALLOW_WORDS = ["painting", "oil on canvas", "acrylic", "watercolor", "gouache", "ink",
-               "textile", "silk", "woven", "carpet", "tapestry", "embroider",
-               "ceramic", "porcelain", "tile", "glass", "lacquer", "enamel",
-               "woodblock", "print", "manuscript", "mixed media", "sculpture"]
+# Only flat artwork types (checked against type, classification and medium)
+ALLOW_WORDS = ["painting", "oil on canvas", "acrylic", "watercolor", "gouache",
+               "ink on", "ink and", "textile", "silk", "woven", "carpet", "tapestry",
+               "embroider", "tile", "woodblock", "print", "manuscript", "mixed media"]
 
-# Skip anything containing these (people, nudity, photos, violence, sensitive items)
+# Skip anything containing these (people, nudity, photos, violence, vessels)
 SKIP_WORDS = ["nude", "naked", "erotic", "nudity", "odalisque", "courtesan", "venus",
-              "lingerie", "undress", "bather", "portrait", "bust", "statue", "figure",
-              "photograph", "albumen", "gelatin silver", "trade card", "cigarette",
-              "cabinet card", "actress", "actor", "dancer", "crucifixion", "skull",
-              "weapon", "sword", "mummy", "coffin"]
+              "lingerie", "undress", "bather", "shunga", "pillow book",
+              "portrait", "bust", "statue", "figure", "photograph", "albumen",
+              "gelatin silver", "trade card", "cigarette", "cabinet card",
+              "actress", "actor", "dancer", "crucifixion", "skull", "weapon",
+              "sword", "mummy", "coffin", "vase", "jar", "bowl", "cup", "vessel",
+              "jug", "bottle", "teapot", "ewer", "urn", "amphora", "flask",
+              "pottery", "platter", "dish"]
 
 MAX_TRIES = 40        # artworks checked per attempt
 MAX_ATTEMPTS = 30     # artworks fully tried before giving up
 OUT_W, OUT_H = 1200, 1500
 MIN_HEIGHT = 1000     # skip artworks too small to crop cleanly
 MAX_BYTES = 250_000   # target size of the saved cover
-CENTER_ZOOM = 1.0     # 1.0 = widest center crop; 0.7 = closer on the middle
+CENTER_ZOOM = 0.8     # 1.0 = widest center crop; 0.8 also trims scale bars at the edges
+BORDER_MIN_SPREAD = 14  # edges plainer than this = object on a backdrop, skipped
 
 Image.MAX_IMAGE_PIXELS = 250_000_000
 
@@ -95,8 +98,21 @@ def _candidate(seen, ids):
     return None
 
 
+def _is_object_photo(img):
+    """True if all four edges are plain, i.e. an object on a backdrop."""
+    w, h = img.size
+    m = max(8, int(min(w, h) * 0.08))
+    strips = [img.crop((0, 0, w, m)), img.crop((0, h - m, w, h)),
+              img.crop((0, 0, m, h)), img.crop((w - m, 0, w, h))]
+    spread = max(ImageStat.Stat(s.convert("L")).stddev[0] for s in strips)
+    print("edge spread:", round(spread, 1))
+    return spread < BORDER_MIN_SPREAD
+
+
 def _make_cover(data):
     img = Image.open(io.BytesIO(data)).convert("RGB")
+    if _is_object_photo(img):
+        return None
     w, h = img.size
     if w / h > OUT_W / OUT_H:
         bh, bw = h, h * OUT_W / OUT_H
@@ -140,7 +156,7 @@ def get_cover(slug, dry=False):
                 print("image failed:", e, obj["primaryImage"])
                 continue
             if data is None:
-                print("skipped: image too small")
+                print("skipped: object photo or too small")
                 continue
             artist = obj.get("artistDisplayName") or "Unknown artist"
             credit = (f"{obj.get('title', 'Untitled')}, {artist}, "
