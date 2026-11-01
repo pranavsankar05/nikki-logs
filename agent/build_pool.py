@@ -9,8 +9,8 @@ from PIL import Image
 
 import covers as c
 
-ROUNDS = 25  # batches of 200 per category per run
-REQUIRE = {"prints": ["color"]}  # a print's medium must mention colour
+ROUNDS = 5  # batches of 200 per category per run
+REQUIRE = {}  # the colour check already filters dull art
 
 
 def _good(oid, cat):

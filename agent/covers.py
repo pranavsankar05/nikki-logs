@@ -21,7 +21,7 @@ POOL_FILE = HERE / "pool.json"
 # ---------------------------------------------------------------- settings
 OUT_W, OUT_H = 1200, 1500
 BATCH = 200              # artworks checked at once
-WORKERS = 2              # parallel requests (the Met limits to ~80 requests/second)
+WORKERS = 2              # parallel requests (8 got rate limited with 403s)
 MAX_ROUNDS = 30          # batches tried per category before moving on
 MIN_HEIGHT = 900         # skip flat artworks too small to crop cleanly
 MAX_BYTES = 250_000      # target size of the saved cover
@@ -40,7 +40,7 @@ CATEGORIES = {
     # "ink":          ["ink on", "ink and", "handscroll", "hanging scroll", "album leaf"],
     # "drawings":     ["drawing", "pen and", "charcoal", "pencil", "chalk", "graphite"],
     # "manuscripts":  ["manuscript", "illuminat", "calligraph", "folio"],
-    "maps_plans":   ["map", "plan", "elevation", "architectural"],
+    # "maps_plans":   ["map", "plan", "elevation", "architectural"],
     "sculpture":    ["sculpture", "statue", "statuette", "bust", "relief", "carving"],
 }
 
@@ -48,16 +48,14 @@ CATEGORIES = {
 WEIGHTS = {
     "prints": 1,
     "paintings": 1,
-    "maps_plans": 1,
     "sculpture": 1,
 }
 
 # Which Met departments to search for each category
 CATEGORY_DEPTS = {
-    "prints":     ["asian art"],
+    "prints":     ["asian art", "drawings and prints"],
     "paintings":  ["european paintings", "american wing", "modern and contemporary",
                    "asian art"],
-    "maps_plans": ["drawings and prints"],
     "sculpture":  ["european sculpture", "arts of africa", "asian art"],
 }
 
@@ -74,20 +72,19 @@ SKIP_WORDS = [
     "amphora", "flask", "pottery", "platter", "dish", "ceramic", "porcelain", "stoneware",
     "armor", "armour", "helmet", "dagger", "jewelry", "jewellery", "ring", "brooch",
     "costume", "textile", "silk", "woven", "carpet", "rug", "tapestry", "embroider",
-    "tile", "furniture", "instrument", "coin", "medal", "mask", "glass", "ivory",
+    "tile", "furniture", "instrument", "coin", "medal", "mask",
     "lacquer", "enamel",
     "pulidor", "polisher", "burnisher", "tool", "implement", "bead", "amulet", "scarab",
-    "seal", "weight", "pestle", "mortar", "axe", "adze", "celt", "blade", "fragment",
-    "shard", "sherd", "plaque", "pendant", "button", "spindle", "whorl", "palette",
+    "pestle", "mortar", "axe", "adze", "celt", "blade",
+    "shard", "sherd", "pendant", "button", "spindle", "whorl", "palette",
 ]
 
 # Skipped for everything EXCEPT sculpture (people in paintings and prints)
 HUMAN_WORDS = [
-    "portrait", "figure", "bust", "head", "torso", "man", "men", "woman", "women",
-    "boy", "girl", "child", "baby", "goddess", "god", "angel", "madonna", "saint",
-    "christ", "virgin", "warrior", "king", "queen", "mother", "father", "couple",
-    "face", "hand", "foot", "body", "people", "actress", "actor", "dancer", "bijin",
-    "cupid", "putto", "putti", "nymph", "satyr",
+    "portrait", "figure", "bust", "torso", "boy", "girl", "child", "baby",
+    "goddess", "god", "angel", "madonna", "saint", "christ", "virgin",
+    "warrior", "king", "queen", "mother", "father", "couple", "actress",
+    "actor", "dancer", "bijin", "cupid", "putto", "putti", "nymph", "satyr",
 ]
 
 # Pattern books, design sheets and ornament (dropped)
