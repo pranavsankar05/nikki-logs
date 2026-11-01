@@ -385,7 +385,8 @@ def _cover_from_category(slug, dry, used, cat):
     return None
 
 
-def get_cover(slug, dry=False):
+def _get_cover_live(slug, dry=False):
+    """Backup: pool or live Met search. Used only if no saved covers exist."""
     used = _load_used()
     result = _cover_from_pool(slug, dry, used)
     if result:
@@ -401,3 +402,36 @@ def get_cover(slug, dry=False):
             return result
     print("No usable artwork found, using fallback")
     return _fallback(slug)
+
+
+def get_cover(slug, dry=False):
+    """Pick an unused saved cover from public/covers (those listed in covers_credits.json)."""
+    credits_file = HERE / "covers_credits.json"
+    credits = json.loads(credits_file.read_text()) if credits_file.exists() else {}
+    saved = [n for n in credits if (COVERS_DIR / n).exists()]
+    if not saved:
+        print("no saved covers, searching the Met live")
+        return _get_cover_live(slug, dry)
+
+    def oid_of(name):
+        return int(name.rsplit("-", 1)[1].split(".")[0])
+
+    used = _load_used()
+    fresh = [n for n in saved if oid_of(n) not in used]
+    if not fresh:
+        print("all saved covers used once, starting over")
+        used = set()
+        fresh = saved
+
+    by_cat = {}
+    for n in fresh:
+        by_cat.setdefault(n.rsplit("-", 1)[0], []).append(n)
+    cats = list(by_cat)
+    cat = random.choices(cats, weights=[max(WEIGHTS.get(x, 1), 0.01) for x in cats])[0]
+    name = random.choice(by_cat[cat])
+    print(f"cover: {name} ({len(fresh)} unused of {len(saved)})")
+
+    if not dry:
+        used.add(oid_of(name))
+        USED_FILE.write_text(json.dumps(sorted(used)) + "\n")
+    return f"/covers/{name}", credits[name]
