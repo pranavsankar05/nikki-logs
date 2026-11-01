@@ -1,0 +1,14 @@
+{
+  "slug": "test-post",
+  "title": "A test post",
+  "date": "09 Oct 2026",
+  "publishedAt": "2026-10-09",
+  "tag": "AI",
+  "excerpt": "Checking that file-based posts show up on the site.",
+  "readTime": "2 min",
+  "image": "https://picsum.photos/seed/test/600/750",
+  "content": ["First paragraph.", "Second paragraph."],
+  "sources": [{ "title": "Example", "url": "https://example.com" }],
+  "score": { "overall": 8, "accuracy": 9 },
+  "linkedinUrl": ""
+}
