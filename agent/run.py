@@ -20,7 +20,7 @@ import llm
 POSTS = Path(__file__).resolve().parent.parent / "src" / "content" / "posts"
 HEADS_CHANCE = 0.5          # chance of heads on a flip day
 MAX_GAP_DAYS = 7            # safeguard: force heads after this many days without a post
-MIN_WORDS = 20              # raise to ~350 once real writing is on
+MIN_WORDS = 20 if llm.MOCK else 800              # raise to ~800 once real writing is on
 UPLOAD_MIN_OVERALL = 6      # below this the post is rejected
 FLOOR_ACCURACY = 5          # below this the post is rejected
 LINKEDIN_MIN_OVERALL = 8    # "very good" -> LinkedIn email
