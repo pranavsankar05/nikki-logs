@@ -6,8 +6,8 @@ export type Post = {
   tag: string
   excerpt: string
   readTime: string
-    "image": "/covers/prints-55264.webp",
-  "imageCredit": "Visit of the Empress to the Third National Industrial Promotional Exhibition at Ueno Park (Ueno dai sankai naikoku kangyō hakuran kai gyokō no zu), Yōshū (Hashimoto) Chikanobu, The Metropolitan Museum of Art, Open Access (CC0)",
+  image: "/covers/prints-55264.webp",
+  imageCredit: "Visit of the Empress to the Third National Industrial Promotional Exhibition at Ueno Park (Ueno dai sankai naikoku kangyō hakuran kai gyokō no zu), Yōshū (Hashimoto) Chikanobu, The Metropolitan Museum of Art, Open Access (CC0)",
   content: string[]
   sources?: { title: string; url: string }[]
   score?: { overall: number; accuracy: number }
