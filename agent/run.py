@@ -9,6 +9,8 @@ import urllib.request
 from datetime import date
 from email.message import EmailMessage
 from pathlib import Path
+import subprocess
+import time
 
 from dotenv import load_dotenv
 
@@ -119,11 +121,54 @@ def notify(subject, body, dry):
     else:
         send_email(subject, body)
 
+REPO = Path(__file__).resolve().parent.parent
+LIVE_TIMEOUT = 600          # seconds to wait for the deploy before emailing anyway
 
-def run(dry, force, tails):
+
+def git(*args):
+    subprocess.run(["git", *args], cwd=REPO, check=True)
+
+
+def push_post(post):
+    git("add", f"src/content/posts/{post['publishedAt']}-{post['slug']}.json",
+        "agent/used_covers.json", "public/covers")
+    git("commit", "-m", f"post: {post['title']}")
+    git("push")
+
+
+def site_has_post(site, slug):
+    """True once the live site's JavaScript contains this post (posts are bundled in)."""
+    def fetch(u):
+        req = urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0"})
+        return urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "ignore")
+    try:
+        html = fetch(f"{site}/?t={int(time.time())}")
+        for src in re.findall(r'src="(/assets/[^"]+\.js)"', html):
+            if slug in fetch(site + src):
+                return True
+    except Exception:
+        pass
+    return False
+
+
+def wait_until_live(site, slug):
+    end = time.time() + LIVE_TIMEOUT
+    while time.time() < end:
+        if site_has_post(site, slug):
+            return True
+        print("waiting for the deploy...")
+        time.sleep(20)
+    return False
+
+def run(dry, force, tails, push=False):
     result = flip(force, tails)
     if result == "skip":
         print("Already posted today. Skipping.")
+        return
+    if result == "capped":
+        notify("nikki logs: monthly limit reached",
+               f"{MAX_POSTS_PER_MONTH} posts are already published this month, "
+               "so nothing was generated today.", dry)
         return
     if result == "tails":
         notify("nikki logs: coin was tails",
@@ -147,21 +192,29 @@ def run(dry, force, tails):
     image, credit = covers.get_cover(slugify(draft["title"]), dry=dry)
     post = build_post(draft, story, scores, image, credit)
 
+    site = os.getenv("SITE_URL", "http://localhost:8443").rstrip("/")
+    url = f"{site}/post/{post['slug']}"
+    note = "(The link works once the site has deployed.)"
+
     if dry:
         print(json.dumps(post, indent=2))
     else:
         path = POSTS / f"{post['publishedAt']}-{post['slug']}.json"
         path.write_text(json.dumps(post, indent=2) + "\n")
         print("Wrote", path.name)
+        if push:
+            push_post(post)
+            if wait_until_live(site, post["slug"]):
+                note = "The site has deployed and the post is live."
+            else:
+                note = ("WARNING: the post was not live after 10 minutes. "
+                        "Check Vercel before sharing the link.")
 
-    site = os.getenv("SITE_URL", "http://localhost:8443").rstrip("/")
-    url = f"{site}/post/{post['slug']}"
     sources = "\n".join(f"- {s['title']}: {s['url']}" for s in post["sources"])
     notify(
         f"nikki logs: new post - {post['title']}",
         f"Title: {post['title']}\nLink: {url}\nScores: {scores}\n"
-        f"Cover: {credit or image}\n\nSources:\n{sources}\n\n"
-        "(The link works once the site has deployed.)",
+        f"Cover: {credit or image}\n\nSources:\n{sources}\n\n{note}",
         dry,
     )
 
@@ -177,6 +230,7 @@ def main():
     dry = "--dry" in sys.argv
     force = "--force" in sys.argv
     tails = "--tails" in sys.argv
+    push = "--push" in sys.argv
     try:
         if "--crash" in sys.argv:
             raise RuntimeError("test crash")
