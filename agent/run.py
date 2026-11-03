@@ -234,7 +234,7 @@ def main():
     try:
         if "--crash" in sys.argv:
             raise RuntimeError("test crash")
-        run(dry, force, tails)
+        run(dry, force, tails,push)
     except Exception:
         err = traceback.format_exc()
         print(err)
